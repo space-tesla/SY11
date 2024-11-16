@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Company Frames</title>
+</head>
+<frameset rows="20%, 80%" border="1">
+    <frame src="header.html" name="header">
+    <frameset cols="30%, 70%">
+        <frame src="departments.html" name="menu">
+        <frame src="default.html" name="content">
+    </frameset>
+</frameset>
+</html>
+
+<!-- Create  new header.html file and use following code --->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Header</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>ABC Company</h1>
+</body>
+</html>
+
+<!-- Create  new departments.html file and use following code --->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Departments</title>
+    
+</head>
+<body>
+    <h4>Departments</h4>
+    <a href="hr.html" target="content">HR Department</a>
+    <a href="sales.html" target="content">Sales Department</a>
+    <a href="it.html" target="content">IT Department</a>
+</body>
+</html>
+
+<!-- Create  new default.html file and use following code --->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to ABC Company</h2>
+    <p>Select a department to view details.</p>
+</body>
+</html>
+
+

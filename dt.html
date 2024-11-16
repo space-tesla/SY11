@@ -1,0 +1,75 @@
+Model the following sales system as a document database. Consider a set of products, customers, orders, and invoices. An invoice is generated when an order is processed.
+Assume appropriate attributes and collections as per the query requirements.
+Insert at least 5 documents in each collection.
+Answer the following Queries:
+a. List all products in the inventory.
+b. List the details of orders with a value greater than 20,000.
+c. List all the orders which have not been processed (invoice not generated).
+d. List all the orders along with their invoice for “Mr. Rajiv”.
+Program:
+
+  
+ 
+# Start MongoDB   
+mongosh
+
+# Create and select the database
+use SalesSystemDB
+
+# Create and insert documents into 'products' collection (5 records)
+db.products.insertMany([
+  { _id: 1, name: "Laptop", price: 50000, stock: 30 },
+  { _id: 2, name: "Smartphone", price: 25000, stock: 50 },
+  { _id: 3, name: "Tablet", price: 15000, stock: 20 },
+  { _id: 4, name: "Headphones", price: 5000, stock: 100 },
+  { _id: 5, name: "Smartwatch", price: 10000, stock: 40 }
+])
+
+# Create and insert documents into 'customers' collection (5 records)
+db.customers.insertMany([
+  { _id: 1, name: "Mr. Rajiv", city: "Mumbai", email: "rajiv@email.com" },
+  { _id: 2, name: "Ms. Anita", city: "Delhi", email: "anita@email.com" },
+  { _id: 3, name: "Mr. Karan", city: "Bangalore", email: "karan@email.com" },
+  { _id: 4, name: "Mr. Rohit", city: "Chennai", email: "rohit@email.com" },
+  { _id: 5, name: "Ms. Priya", city: "Pune", email: "priya@email.com" }
+])
+
+# Create and insert documents into 'orders' collection (5 records)
+db.orders.insertMany([
+  { _id: 1, customer_id: 1, product_id: 1, quantity: 1, status: "Processed", order_date: "2023-08-01", total_value: 50000 },
+  { _id: 2, customer_id: 2, product_id: 2, quantity: 2, status: "Not Processed", order_date: "2023-08-02", total_value: 50000 },
+  { _id: 3, customer_id: 3, product_id: 3, quantity: 1, status: "Not Processed", order_date: "2023-08-03", total_value: 15000 },
+  { _id: 4, customer_id: 4, product_id: 4, quantity: 5, status: "Processed", order_date: "2023-08-04", total_value: 25000 },
+  { _id: 5, customer_id: 5, product_id: 5, quantity: 3, status: "Processed", order_date: "2023-08-05", total_value: 30000 }
+])
+
+# Create and insert documents into 'invoices' collection (5 records)
+db.invoices.insertMany([
+  { _id: 1, order_id: 1, invoice_date: "2023-08-01", amount: 50000 },
+  { _id: 2, order_id: 4, invoice_date: "2023-08-04", amount: 25000 },
+  { _id: 3, order_id: 5, invoice_date: "2023-08-05", amount: 30000 }
+])
+
+# a. List all products in the inventory
+db.products.find({}, { name: 1, price: 1, stock: 1, _id: 0 })
+
+# b. List the details of orders with a value > 20000
+db.orders.find({ total_value: { $gt: 20000 } }, { _id: 0 })
+
+# c. List all the orders which have not been processed (invoice not generated)
+db.orders.find({ status: "Not Processed" }, { _id: 0 })
+
+# d. List all the orders along with their invoice for "Mr. Rajiv"
+db.orders.aggregate([
+  { $match: { customer_id: 1 } },
+  {
+    $lookup: {
+      from: "invoices",
+      localField: "_id",
+      foreignField: "order_id",
+      as: "invoice_details"
+    }
+  },
+  { $project: { order_id: 1, customer_id: 1, total_value: 1, invoice_details: 1, _id: 0 } }
+])
+
